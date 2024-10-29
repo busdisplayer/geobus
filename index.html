@@ -64,7 +64,7 @@ function afficherProchainsDeparts() {
         row.appendChild(destinationCell);
 
         const prochainDepartCell = document.createElement("td");
-        prochainDepartCell.textContent = prochainDepart(bus.horaires);
+        prochainDepartCell.textContent = prochainDepart(calculTempsRestant(bus.horaires));
         row.appendChild(prochainDepartCell);
 
         tableBody.appendChild(row);
@@ -74,6 +74,22 @@ function afficherProchainsDeparts() {
 // Mettre à jour et afficher les prochains départs toutes les minutes
 afficherProchainsDeparts();
 setInterval(afficherProchainsDeparts, 60000);
+
+function calculTempsRestant(depart) {
+    const now = new Date();
+    const [h, m] = depart.split(":").map(Number);
+    const departDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+
+    const difference = Math.floor((departDate - now) / (1000 * 60)); // Différence en minutes
+
+    if (difference <= 0) {
+        return "En station";
+    } else if (difference === 1) {
+        return "Imminent";
+    } else {
+        return `${difference} min`;
+    }
+}
 </script>
 
 </body>
