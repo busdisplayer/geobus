@@ -32,32 +32,31 @@
     <script>
         // Définition des lignes de bus, des destinations et des horaires
         const lignesBus = [
-    { 
-        ligne: "L11", 
-        destination: "Saint-Étienne Châteaucreux", 
-        horaires: [
-            "06:12", "06:28", "06:38", "06:42", 
-            "07:22", "07:47", "08:27", "09:42", 
-            "10:47", "11:22", "12:07", "13:47", 
-            "14:12", "15:17", "15:57", "16:12", 
-            "16:42", "17:12", "17:37", "18:02", 
-            "18:19", "19:27"
-        ] 
-    },
-    { 
-        ligne: "L11", 
-        destination: "Montbrison Hôpital Beauregard", 
-        horaires: [
-            "07:16", "07:42", "07:56", "08:46", 
-            "08:57", "09:11", "09:52", "10:34", 
-            "11:05", "12:49", "13:36", "14:36", 
-            "15:06", "16:47", "17:10", "18:02", 
-            "18:18", "19:04", "19:08", "19:19", 
-            "19:51", "20:19", "21:22"
-        ] 
-    }
-];
-
+            { 
+                ligne: "L11", 
+                destination: "Saint-Étienne Châteaucreux", 
+                horaires: [
+                    "06:12", "06:28", "06:38", "06:42", 
+                    "07:22", "07:47", "08:27", "09:42", 
+                    "10:47", "11:22", "12:07", "13:47", 
+                    "14:12", "15:17", "15:57", "16:12", 
+                    "16:42", "17:12", "17:37", "18:02", 
+                    "18:19", "19:27"
+                ] 
+            },
+            { 
+                ligne: "L11", 
+                destination: "Montbrison Hôpital Beauregard", 
+                horaires: [
+                    "07:16", "07:42", "07:56", "08:46", 
+                    "08:57", "09:11", "09:52", "10:34", 
+                    "11:05", "12:49", "13:36", "14:36", 
+                    "15:06", "16:47", "17:10", "18:02", 
+                    "18:18", "19:04", "19:08", "19:19", 
+                    "19:51", "20:19", "21:22"
+                ] 
+            }
+        ];
 
         // Fonction pour trouver le temps restant pour le prochain départ
         function prochainDepartMinutes(horaires) {
@@ -93,12 +92,12 @@
             const tableBody = document.querySelector("#tableProchainsDeparts tbody");
             tableBody.innerHTML = ''; // Réinitialise le contenu du tableau
 
-            let hasDepartures = false; // Indicateur pour vérifier s'il y a des départs
+            // Trier les lignes de bus en fonction du temps restant pour le prochain départ
+            lignesBus.sort((a, b) => prochainDepartMinutes(a.horaires) - prochainDepartMinutes(b.horaires));
 
             for (let bus of lignesBus) {
                 const minutesRestants = prochainDepartMinutes(bus.horaires);
-                if (minutesRestants >= 0) { // Ajoute uniquement les bus avec des départs à venir
-                    hasDepartures = true;
+                if (minutesRestants >= 0) { // Ne crée la ligne que si un départ est imminent ou en station
                     const row = document.createElement("tr");
 
                     const ligneCell = document.createElement("td");
@@ -115,17 +114,6 @@
 
                     tableBody.appendChild(row);
                 }
-            }
-
-            // Si aucun départ n'est trouvé, afficher un message
-            if (!hasDepartures) {
-                const row = document.createElement("tr");
-                const cell = document.createElement("td");
-                cell.colSpan = 3;
-                cell.textContent = "Aucun départ";
-                cell.className = "w3-center"; // Centrer le message
-                row.appendChild(cell);
-                tableBody.appendChild(row);
             }
         }
 
