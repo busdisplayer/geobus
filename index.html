@@ -32,10 +32,32 @@
     <script>
         // Définition des lignes de bus, des destinations et des horaires
         const lignesBus = [
-            { ligne: "Ligne 1", destination: "Centre-ville", horaires: ["08:00", "09:30", "10:15"] },
-            { ligne: "Ligne 2", destination: "Gare", horaires: ["07:45", "09:00", "11:00"] },
-            { ligne: "Ligne 3", destination: "Université", horaires: ["08:10", "09:50", "10:50"] },
-        ];
+    { 
+        ligne: "L11", 
+        destination: "Saint-Étienne Châteaucreux", 
+        horaires: [
+            "06:12", "06:28", "06:38", "06:42", 
+            "07:22", "07:47", "08:27", "09:42", 
+            "10:47", "11:22", "12:07", "13:47", 
+            "14:12", "15:17", "15:57", "16:12", 
+            "16:42", "17:12", "17:37", "18:02", 
+            "18:19", "19:27"
+        ] 
+    },
+    { 
+        ligne: "L11", 
+        destination: "Montbrison Hôpital Beauregard", 
+        horaires: [
+            "07:16", "07:42", "07:56", "08:46", 
+            "08:57", "09:11", "09:52", "10:34", 
+            "11:05", "12:49", "13:36", "14:36", 
+            "15:06", "16:47", "17:10", "18:02", 
+            "18:18", "19:04", "19:08", "19:19", 
+            "19:51", "20:19", "21:22"
+        ] 
+    }
+];
+
 
         // Fonction pour trouver le temps restant pour le prochain départ
         function prochainDepartMinutes(horaires) {
