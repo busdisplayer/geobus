@@ -46,7 +46,7 @@
             for (let heure of horaires) {
                 const [h, m] = heure.split(":").map(Number);
                 const minutes = h * 60 + m;
-                if (minutes > currentMinutes && minutes < prochainDepart) {
+                if (minutes >= currentMinutes && minutes < prochainDepart) {
                     prochainDepart = minutes;
                 }
             }
@@ -71,25 +71,38 @@
             const tableBody = document.querySelector("#tableProchainsDeparts tbody");
             tableBody.innerHTML = ''; // Réinitialise le contenu du tableau
 
-            // Trier les lignes de bus en fonction du temps restant pour le prochain départ
-            lignesBus.sort((a, b) => prochainDepartMinutes(a.horaires) - prochainDepartMinutes(b.horaires));
+            let hasDepartures = false; // Indicateur pour vérifier s'il y a des départs
 
             for (let bus of lignesBus) {
-                const row = document.createElement("tr");
-
-                const ligneCell = document.createElement("td");
-                ligneCell.textContent = bus.ligne;
-                row.appendChild(ligneCell);
-
-                const destinationCell = document.createElement("td");
-                destinationCell.textContent = bus.destination;
-                row.appendChild(destinationCell);
-
-                const prochainDepartCell = document.createElement("td");
                 const minutesRestants = prochainDepartMinutes(bus.horaires);
-                prochainDepartCell.textContent = calculTempsRestant(minutesRestants);
-                row.appendChild(prochainDepartCell);
+                if (minutesRestants >= 0) { // Ajoute uniquement les bus avec des départs à venir
+                    hasDepartures = true;
+                    const row = document.createElement("tr");
 
+                    const ligneCell = document.createElement("td");
+                    ligneCell.textContent = bus.ligne;
+                    row.appendChild(ligneCell);
+
+                    const destinationCell = document.createElement("td");
+                    destinationCell.textContent = bus.destination;
+                    row.appendChild(destinationCell);
+
+                    const prochainDepartCell = document.createElement("td");
+                    prochainDepartCell.textContent = calculTempsRestant(minutesRestants);
+                    row.appendChild(prochainDepartCell);
+
+                    tableBody.appendChild(row);
+                }
+            }
+
+            // Si aucun départ n'est trouvé, afficher un message
+            if (!hasDepartures) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                cell.colSpan = 3;
+                cell.textContent = "Aucun départ";
+                cell.className = "w3-center"; // Centrer le message
+                row.appendChild(cell);
                 tableBody.appendChild(row);
             }
         }
