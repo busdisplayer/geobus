@@ -7,6 +7,74 @@
   <meta description="L'application nouvelle génération de suivi des bus en temps réel !">
 </head>
 <body>
-  
+  <div class="w3-center w3-blue">
+    <h1>Géobus - Beauregard</h1>
+  </div>
+<table id="tableProchainsDeparts">
+    <thead>
+        <tr>
+            <th>Ligne</th>
+            <th>Destination</th>
+            <th>Prochain Départ</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Les données seront insérées ici -->
+    </tbody>
+</table>
+
+<script>
+// Définition des lignes de bus, des destinations et des horaires
+const lignesBus = [
+    { ligne: "Ligne 1", destination: "Centre-ville", horaires: ["08:00", "09:30", "10:15"] },
+    { ligne: "Ligne 2", destination: "Gare", horaires: ["07:45", "09:00", "11:00"] },
+    { ligne: "Ligne 3", destination: "Université", horaires: ["08:10", "09:50", "11:20"] },
+    // Ajoutez d'autres lignes si nécessaire...
+];
+
+// Fonction pour trouver le prochain départ en fonction de l'heure actuelle
+function prochainDepart(horaires) {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    for (let heure of horaires) {
+        const [h, m] = heure.split(":").map(Number);
+        const minutes = h * 60 + m;
+        if (minutes > currentMinutes) {
+            return heure;
+        }
+    }
+    return horaires[0]; // Retourne le premier horaire si aucun départ n'est trouvé pour aujourd'hui
+}
+
+// Fonction pour mettre à jour le tableau des départs
+function afficherProchainsDeparts() {
+    const tableBody = document.querySelector("#tableProchainsDeparts tbody");
+    tableBody.innerHTML = ''; // Réinitialise le contenu du tableau
+
+    for (let bus of lignesBus) {
+        const row = document.createElement("tr");
+
+        const ligneCell = document.createElement("td");
+        ligneCell.textContent = bus.ligne;
+        row.appendChild(ligneCell);
+
+        const destinationCell = document.createElement("td");
+        destinationCell.textContent = bus.destination;
+        row.appendChild(destinationCell);
+
+        const prochainDepartCell = document.createElement("td");
+        prochainDepartCell.textContent = prochainDepart(bus.horaires);
+        row.appendChild(prochainDepartCell);
+
+        tableBody.appendChild(row);
+    }
+}
+
+// Mettre à jour et afficher les prochains départs toutes les minutes
+afficherProchainsDeparts();
+setInterval(afficherProchainsDeparts, 60000);
+</script>
+
 </body>
 </html>
